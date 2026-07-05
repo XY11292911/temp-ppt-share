@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>基于手势识别的智能追踪系统 - 答辩PPT</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+.page {
+    width: 1280px; height: 720px; position: relative; overflow: hidden;
+    page-break-after: always; break-after: page;
+}
+
+/* === 封面 === */
+#cover {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+#cover .circuit-bg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+#cover .accent-line {
+    position: absolute; top: 280px; left: 60px; width: 80px; height: 4px;
+    background: #e94560;
+}
+#cover h1 {
+    position: absolute; top: 300px; left: 60px;
+    font-size: 48px; font-weight: 700; color: #ffffff;
+    line-height: 1.3; letter-spacing: 2px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+#cover .subtitle {
+    position: absolute; top: 420px; left: 60px;
+    font-size: 20px; color: #a0a0b0;
+}
+#cover .info {
+    position: absolute; top: 520px; left: 60px;
+    font-size: 16px; color: #808090; line-height: 2;
+}
+#cover .hand-icon {
+    position: absolute; top: 120px; right: 100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(233,69,96,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+}
+#cover .hand-icon::before {
+    content: "👆"; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); font-size: 120px;
+    filter: drop-shadow(0 0 30px rgba(233,69,96,0.5));
+}
+
+/* === 内容页通用 === */
+.content-page {
+    background: #fafbfc;
+}
+.content-page .top-bar {
+    position: absolute; top: 0; left: 0; width: 100%; height: 6px;
+    background: linear-gradient(90deg, #e94560, #533483);
+}
+.content-page h2 {
+    position: absolute; top: 35px; left: 60px;
+    font-size: 32px; font-weight: 700; color: #1a1a2e;
+}
+.content-page .title-line {
+    position: absolute; top: 78px; left: 60px; width: 50px; height: 3px;
+    background: #e94560;
+}
+.content-page .page-num {
+    position: absolute; bottom: 20px; right: 40px;
+    font-size: 12px; color: #a0a0b0;
+}
+.content-page .footer-text {
+    position: absolute; bottom: 20px; left: 40px;
+    font-size: 12px; color: #a0a0b0;
+}
+
+/* === 目录页 === */
+#toc { background: #1a1a2e; }
+#toc h2 { color: #fff; top: 50px; }
+#toc .title-line { background: #e94560; }
+#toc .big-text {
+    position: absolute; top: 140px; left: 60px;
+    font-size: 80px; font-weight: 900; color: rgba(255,255,255,0.05);
+    line-height: 1; letter-spacing: -2px;
+}
+#toc .toc-item {
+    position: absolute; left: 320px;
+    display: flex; align-items: center; gap: 20px;
+}
+#toc .toc-num {
+    font-size: 28px; font-weight: 700; color: #e94560;
+    font-family: "SF Mono", monospace;
+}
+#toc .toc-text {
+    font-size: 20px; color: #d0d0e0;
+}
+#toc .toc-line {
+    position: absolute; left: 320px;
+    width: 470px; height: 1px; background: rgba(255,255,255,0.1);
+}
+
+/* === 背景页 === */
+#bg-page .left-content {
+    position: absolute; top: 110px; left: 60px; width: 540px;
+}
+#bg-page .item {
+    margin-bottom: 30px; padding: 20px;
+    background: #fff; border-radius: 8px;
+    border-left: 3px solid #e94560;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+#bg-page .item h3 {
+    font-size: 18px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px;
+}
+#bg-page .item p {
+    font-size: 14px; color: #555; line-height: 1.6;
+}
+#bg-page .right-panel {
+    position: absolute; top: 110px; right: 60px; width: 560px;
+    background: #1a1a2e; border-radius: 12px; padding: 30px;
+    color: #fff;
+}
+#bg-page .right-panel h3 {
+    font-size: 18px; margin-bottom: 20px; color: #e94560;
+}
+#bg-page .app-item {
+    display: flex; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 14px;
+}
+#bg-page .app-item span:first-child { color: #a0a0b0; }
+#bg-page .app-item span:last-child { color: #d0d0e0; text-align: right; }
+#bg-page .highlight-box {
+    margin-top: 20px; padding: 15px;
+    background: rgba(233,69,96,0.1); border-radius: 8px;
+    border: 1px solid rgba(233,69,96,0.3);
+    font-size: 14px; color: #d0d0e0; line-height: 1.6;
+}
+
+/* === 架构页 === */
+#arch .arch-desc {
+    position: absolute; top: 100px; left: 60px;
+    font-size: 16px; color: #666;
+}
+#arch .pc-box {
+    position: absolute; top: 160px; left: 80px;
+    width: 420px; padding: 25px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px; color: #fff;
+}
+#arch .stm-box {
+    position: absolute; top: 160px; right: 80px;
+    width: 420px; padding: 25px;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    border-radius: 12px; color: #fff;
+}
+#arch .box-title {
+    font-size: 20px; font-weight: 700; margin-bottom: 15px;
+    display: flex; align-items: center; gap: 10px;
+}
+#arch .box-item {
+    font-size: 14px; line-height: 2; opacity: 0.9;
+}
+#arch .arrow-h {
+    position: absolute; top: 240px; left: 520px; width: 200px;
+    height: 2px; background: #e94560;
+    display: flex; align-items: center; justify-content: center;
+}
+#arch .arrow-h::after {
+    content: "➜"; color: #e94560; font-size: 20px;
+    position: absolute; right: -5px;
+}
+#arch .arrow-label {
+    position: absolute; top: 250px; left: 560px;
+    font-size: 12px; color: #e94560; font-weight: 600;
+}
+#arch .servo-box {
+    position: absolute; bottom: 130px; right: 80px;
+    width: 420px; padding: 20px;
+    background: #fff; border: 2px solid #e94560;
+    border-radius: 10px; text-align: center;
+    font-size: 16px; font-weight: 600; color: #1a1a2e;
+}
+#arch .cam-box {
+    position: absolute; bottom: 130px; left: 80px;
+    width: 420px; padding: 20px;
+    background: #fff; border: 2px solid #667eea;
+    border-radius: 10px; text-align: center;
+    font-size: 16px; font-weight: 600; color: #1a1a2e;
+}
+#arch .flow-text {
+    position: absolute; bottom: 50px; left: 60px; right: 60px;
+    text-align: center; font-size: 13px; color: #888;
+    background: #f0f0f5; padding: 10px; border-radius: 6px;
+}
+
+/* === 手势识别页 === */
+#hand .algo-panel {
+    position: absolute; top: 110px; left: 60px; width: 500px;
+    background: #fff; border-radius: 12px; padding: 25px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+#hand .algo-panel h3 {
+    font-size: 20px; color: #1a1a2e; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+}
+#hand .step {
+    margin-bottom: 18px; padding-left: 15px;
+    border-left: 3px solid #e94560;
+}
+#hand .step-num {
+    font-size: 14px; font-weight: 700; color: #e94560;
+}
+#hand .step-title {
+    font-size: 16px; font-weight: 600; color: #1a1a2e; margin: 4px 0;
+}
+#hand .step-desc {
+    font-size: 13px; color: #666; line-height: 1.5;
+}
+#hand .code-panel {
+    position: absolute; top: 110px; right: 60px; width: 560px;
+    background: #1e1e2e; border-radius: 12px; padding: 25px;
+    color: #a6accd; font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 13px; line-height: 1.8;
+}
+#hand .code-panel .comment { color: #676e95; }
+#hand .code-panel .keyword { color: #c792ea; }
+#hand .code-panel .func { color: #82aaff; }
+#hand .code-panel .string { color: #c3e88d; }
+
+/* === PID页 === */
+#pid .formula-box {
+    position: absolute; top: 110px; left: 60px; width: 540px;
+    background: #fff; border-radius: 12px; padding: 30px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+#pid .formula {
+    font-size: 22px; color: #1a1a2e; text-align: center;
+    padding: 20px; background: #f8f9fa; border-radius: 8px;
+    margin: 15px 0; font-family: "Times New Roman", serif;
+}
+#pid .pid-item {
+    margin: 12px 0; padding: 12px;
+    background: #f8f9fa; border-radius: 6px;
+    font-size: 14px; color: #444;
+}
+#pid .pid-item strong { color: #e94560; }
+#pid .param-table {
+    position: absolute; top: 110px; right: 60px; width: 540px;
+    background: #fff; border-radius: 12px; padding: 25px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+#pid .param-table h3 { font-size: 18px; margin-bottom: 15px; color: #1a1a2e; }
+#pid table { width: 100%; border-collapse: collapse; font-size: 14px; }
+#pid th { background: #1a1a2e; color: #fff; padding: 12px; text-align: left; }
+#pid td { padding: 10px 12px; border-bottom: 1px solid #eee; color: #444; }
+#pid tr:nth-child(even) td { background: #f8f9fa; }
+
+/* === 测试页 === */
+#test .test-card {
+    position: absolute; top: 110px; left: 60px; width: 520px;
+    background: #fff; border-radius: 12px; padding: 25px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+#test .test-card h3 { font-size: 18px; color: #1a1a2e; margin-bottom: 15px; }
+#test .test-item {
+    padding: 12px 0; border-bottom: 1px solid #eee;
+    font-size: 14px; color: #444; line-height: 1.6;
+}
+#test .test-item strong { color: #e94560; }
+#test .result-table {
+    position: absolute; top: 110px; right: 60px; width: 560px;
+    background: #fff; border-radius: 12px; padding: 25px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+#test .result-table h3 { font-size: 18px; margin-bottom: 15px; color: #1a1a2e; }
+#test .metric { display: flex; justify-content: space-between; padding: 15px; margin-bottom: 10px; background: #f8f9fa; border-radius: 8px; }
+#test .metric-name { font-size: 14px; color: #666; }
+#test .metric-value { font-size: 16px; font-weight: 700; color: #e94560; }
+
+/* === 总结页 === */
+#conclusion { background: #1a1a2e; }
+#conclusion h2 { color: #fff; }
+#conclusion .title-line { background: #e94560; }
+#conclusion .footer-text, #conclusion .page-num { color: rgba(255,255,255,0.3); }
+#conclusion .sum-card {
+    position: absolute; top: 110px; left: 60px; width: 540px;
+    background: rgba(255,255,255,0.05); border-radius: 12px; padding: 25px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+#conclusion .sum-card h3 { font-size: 18px; color: #e94560; margin-bottom: 15px; }
+#conclusion .sum-card p { font-size: 14px; color: #b0b0c0; line-height: 1.8; margin-bottom: 10px; }
+#conclusion .future-card {
+    position: absolute; top: 110px; right: 60px; width: 560px;
+    background: rgba(255,255,255,0.05); border-radius: 12px; padding: 25px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+#conclusion .future-card h3 { font-size: 18px; color: #e94560; margin-bottom: 15px; }
+#conclusion .future-item {
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 14px; color: #b0b0c0; line-height: 1.6;
+}
+#conclusion .future-item strong { color: #d0d0e0; }
+
+/* === 致谢页 === */
+#thanks {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+#thanks .thanks-line {
+    width: 80px; height: 4px; background: #e94560; margin-bottom: 30px;
+}
+#thanks h1 {
+    font-size: 56px; font-weight: 700; color: #fff;
+    margin-bottom: 30px; letter-spacing: 8px;
+}
+#thanks p {
+    font-size: 20px; color: #a0a0b0; line-height: 2; text-align: center;
+}
+#thanks .thanks-info {
+    margin-top: 40px; font-size: 16px; color: #808090;
+}
+</style>
+</head>
+<body>
+
+<!-- 封面 -->
+<div class="page" id="cover" data-document-role="page" data-label="封面">
+    <div class="circuit-bg"></div>
+    <div class="hand-icon"></div>
+    <div class="accent-line"></div>
+    <h1>基于手势识别的<br>智能追踪系统</h1>
+    <div class="subtitle">毕业设计答辩</div>
+    <div class="info">
+        答辩人：于星宇<br>
+        指导教师：黄丰云<br>
+        2026.7
+    </div>
+</div>
+
+<!-- 目录 -->
+<div class="page" id="toc" data-document-role="page" data-label="目录">
+    <div class="top-bar"></div>
+    <h2>答辩内容</h2>
+    <div class="title-line"></div>
+    <div class="big-text">CONT<br>ENTS</div>
+    <div class="toc-item" style="top: 150px;"><span class="toc-num">01</span><span class="toc-text">研究背景与意义</span></div>
+    <div class="toc-line" style="top: 200px;"></div>
+    <div class="toc-item" style="top: 220px;"><span class="toc-num">02</span><span class="toc-text">系统总体方案</span></div>
+    <div class="toc-line" style="top: 270px;"></div>
+    <div class="toc-item" style="top: 290px;"><span class="toc-num">03</span><span class="toc-text">手势识别模块</span></div>
+    <div class="toc-line" style="top: 340px;"></div>
+    <div class="toc-item" style="top: 360px;"><span class="toc-num">04</span><span class="toc-text">舵机控制模块</span></div>
+    <div class="toc-line" style="top: 410px;"></div>
+    <div class="toc-item" style="top: 430px;"><span class="toc-num">05</span><span class="toc-text">通信与硬件设计</span></div>
+    <div class="toc-line" style="top: 480px;"></div>
+    <div class="toc-item" style="top: 500px;"><span class="toc-num">06</span><span class="toc-text">软件设计与实现</span></div>
+    <div class="toc-line" style="top: 550px;"></div>
+    <div class="toc-item" style="top: 570px;"><span class="toc-num">07</span><span class="toc-text">系统测试与分析</span></div>
+    <div class="toc-line" style="top: 620px;"></div>
+    <div class="toc-item" style="top: 640px;"><span class="toc-num">08</span><span class="toc-text">总结与展望</span></div>
+</div>
+
+<!-- 研究背景 -->
+<div class="page content-page" id="bg-page" data-document-role="page" data-label="研究背景与意义">
+    <div class="top-bar"></div>
+    <h2>研究背景与意义</h2>
+    <div class="title-line"></div>
+    <div class="left-content">
+        <div class="item">
+            <h3>手势识别的发展</h3>
+            <p>手势识别作为人机交互的重要方式，在智能监控、虚拟现实、辅助设备和机器人交互等领域具有广泛应用价值。MediaPipe等开源框架大大降低了手势识别的技术门槛。</p>
+        </div>
+        <div class="item">
+            <h3>舵机控制的需求</h3>
+            <p>传统舵机控制依赖手动操作或预设程序，缺乏灵活性和实时响应能力。将手势识别与舵机控制结合，可实现更自然的人机交互方式。</p>
+        </div>
+        <div class="item">
+            <h3>项目意义</h3>
+            <p>本项目整合计算机视觉、嵌入式控制和串口通信技术，构建了一套完整的实时手势跟踪系统，具有较强的工程实践价值和教学示范意义。</p>
+        </div>
+    </div>
+    <div class="right-panel">
+        <h3>典型应用场景</h3>
+        <div class="app-item"><span>智能监控</span><span>自动跟踪目标人物</span></div>
+        <div class="app-item"><span>机器人交互</span><span>手势控制机械臂方向</span></div>
+        <div class="app-item"><span>辅助设备</span><span>非接触式设备控制</span></div>
+        <div class="app-item"><span>虚拟展示</span><span>操控3D模型视角</span></div>
+        <div class="highlight-box">
+            <strong>核心目标：</strong>通过摄像头实时捕获手势，利用MediaPipe识别手掌位置，经PID算法驱动双舵机云台，实现对手掌的自动跟踪。
+        </div>
+    </div>
+    <div class="footer-text">基于手势识别的智能追踪系统</div>
+    <div class="page-num">03</div>
+</div>
+
+<!-- 系统架构 -->
+<div class="page content-page" id="arch" data-document-role="page" data-label="系统总体方案">
+    <div class="top-bar"></div>
+    <h2>系统总体方案</h2>
+    <div class="title-line"></div>
+    <div class="arch-desc">系统采用"PC端+STM32端"双平台架构，通过串口通信实现数据交互</div>
+    <div class="pc-box">
+        <div class="box-title">PC端</div>
+        <div class="box-item">摄像头采集图像</div>
+        <div class="box-item">OpenCV + MediaPipe 手势识别</div>
+        <div class="box-item">计算手掌中心与画面中心误差</div>
+        <div class="box-item">串口发送误差数据</div>
+    </div>
+    <div class="stm-box">
+        <div class="box-title">STM32端</div>
+        <div class="box-item">串口接收误差数据</div>
+        <div class="box-item">PID闭环控制算法</div>
+        <div class="box-item">PWM输出驱动舵机</div>
+        <div class="box-item">双轴云台跟踪手势</div>
+    </div>
+    <div class="arrow-h"></div>
+    <div class="arrow-label">USART 9600bps</div>
+    <div class="cam-box">USB摄像头</div>
+    <div class="servo-box">舵机云台（Pan + Tilt）</div>
+    <div class="flow-text">摄像头采集 → MediaPipe识别 → 计算误差 → 串口发送 → STM32接收 → PID运算 → PWM驱动 → 云台跟踪</div>
+    <div class="footer-text">基于手势识别的智能追踪系统</div>
+    <div class="page-num">04</div>
+</div>
+
+<!-- 手势识别 -->
+<div class="page content-page" id="hand" data-document-role="page" data-label="手势识别模块">
+    <div class="top-bar"></div>
+    <h2>手势识别模块设计</h2>
+    <div class="title-line"></div>
+    <div class="algo-panel">
+        <h3>MediaPipe 手势识别流程</h3>
+        <div class="step">
+            <div class="step-num">STEP 1</div>
+            <div class="step-title">图像采集</div>
+            <div class="step-desc">OpenCV 打开 USB 摄像头，获取实时视频流</div>
+        </div>
+        <div class="step">
+            <div class="step-num">STEP 2</div>
+            <div class="step-title">关键点检测</div>
+            <div class="step-desc">MediaPipe Hands 模型识别 21 个手部关键点</div>
+        </div>
+        <div class="step">
+            <div class="step-num">STEP 3</div>
+            <div class="step-title">中心计算</div>
+            <div class="step-desc">计算 20 个关键点坐标的均值，得到手掌中心 (cx, cy)</div>
+        </div>
+        <div class="step">
+            <div class="step-num">STEP 4</div>
+            <div class="step-title">误差输出</div>
+            <div class="step-desc">与图像中心比较，输出误差 (error_x, error_y)</div>
+        </div>
+    </div>
+    <div class="code-panel">
+        <div style="color:#676e95;margin-bottom:10px;">// 核心代码片段</div>
+        <div>imgRGB = cv2.cvtColor(frame, COLOR_BGR2RGB)    // 1. 转RGB</div>
+        <div>result = hands.process(imgRGB)                     // 2. 手势识别</div>
+        <div>cx = int(np.mean(x_list))                          // 3. 计算中心</div>
+        <div>error_x = int(cx - imgWidth / 2)                   // 4. 计算误差</div>
+        <div>ser_stm32.write(f'[{error_x},{error_y}]\r\n'.encode())  // 5. 串口发送</div>
+    </div>
+    <div class="footer-text">基于手势识别的智能追踪系统</div>
+    <div class="page-num">05</div>
+</div>
+
+<!-- PID -->
+<div class="page content-page" id="pid" data-document-role="page" data-label="PID控制算法">
+    <div class="top-bar"></div>
+    <h2>PID 控制算法</h2>
+    <div class="title-line"></div>
+    <div class="formula-box">
+        <h3 style="font-size:18px;color:#1a1a2e;margin-bottom:10px;">算法原理</h3>
+        <div class="formula">u(t) = Kp·e(t) + Ki·∫e(t)dt + Kd·de(t)/dt</div>
+        <div class="pid-item"><strong>P（比例项）：</strong>快速响应误差，Kp越大响应越快</div>
+        <div class="pid-item"><strong>I（积分项）：</strong>消除稳态误差，累积历史偏差</div>
+        <div class="pid-item"><strong>D（微分项）：</strong>抑制超调，预测误差变化趋势</div>
+        <div class="pid-item"><strong>输出限幅：</strong>防止舵机角度突变，保证平滑运动</div>
+    </div>
+    <div class="param-table">
+        <h3>参数配置</h3>
+        <table>
+            <tr><th>参数</th><th>数值</th><th>作用</th></tr>
+            <tr><td>Kp</td><td>1.0</td><td>比例增益，决定响应速度</td></tr>
+            <tr><td>Ki</td><td>0.1</td><td>积分增益，消除稳态误差</td></tr>
+            <tr><td>Kd</td><td>0.5</td><td>微分增益，抑制振荡超调</td></tr>
+            <tr><td>Imax</td><td>50</td><td>积分限幅，防止积分饱和</td></tr>
+        </table>
+    </div>
+    <div class="footer-text">基于手势识别的智能追踪系统</div>
+    <div class="page-num">07</div>
+</div>
+
+<!-- 测试 -->
+<div class="page content-page" id="test" data-document-role="page" data-label="系统测试与分析">
+    <div class="top-bar"></div>
+    <h2>系统测试与结果分析</h2>
+    <div class="title-line"></div>
+    <div class="test-card">
+        <h3>测试场景</h3>
+        <div class="test-item"><strong>静态跟踪测试：</strong>手掌静止放置，观察舵机是否稳定对准目标</div>
+        <div class="test-item"><strong>动态跟踪测试：</strong>手掌匀速移动，测试舵机跟随的实时性</div>
+        <div class="test-item"><strong>光照变化测试：</strong>在不同光照条件下测试识别稳定性</div>
+        <div class="test-item"><strong>抗干扰测试：</strong>背景存在其他物体时测试误跟踪情况</div>
+    </div>
+    <div class="result-table">
+        <h3>测试指标</h3>
+        <div class="metric"><span class="metric-name">跟踪精度</span><span class="metric-value">像素级误差 ✓</span></div>
+        <div class="metric"><span class="metric-name">响应延迟</span><span class="metric-value">100~200ms ✓</span></div>
+        <div class="metric"><span class="metric-name">跟踪平滑度</span><span class="metric-value">轻微抖动 △</span></div>
+        <div class="metric"><span class="metric-name">识别成功率</span><span class="metric-value">> 90% ✓</span></div>
+    </div>
+    <div class="footer-text">基于手势识别的智能追踪系统</div>
+    <div class="page-num">11</div>
+</div>
+
+<!-- 总结 -->
+<div class="page" id="conclusion" data-document-role="page" data-label="总结与展望">
+    <div class="top-bar"></div>
+    <h2>总结与展望</h2>
+    <div class="title-line"></div>
+    <div class="sum-card">
+        <h3>项目总结</h3>
+        <p>成功实现了基于手势识别的舵机跟踪系统，整合了计算机视觉、嵌入式控制和串口通信技术。</p>
+        <p><strong style="color:#e94560;">创新点：</strong>MediaPipe 手势识别 + PID 闭环控制 + 双平台架构</p>
+        <p><strong style="color:#e94560;">核心技术：</strong>OpenCV、MediaPipe、STM32 PWM、PID 算法、串口通信</p>
+    </div>
+    <div class="future-card">
+        <h3>未来展望</h3>
+        <div class="future-item"><strong>深度学习升级：</strong>引入 YOLO 目标检测，提升识别鲁棒性</div>
+        <div class="future-item"><strong>无线通信：</strong>使用 WiFi/蓝牙替代串口，摆脱线缆束缚</div>
+        <div class="future-item"><strong>自适应PID：</strong>根据场景动态调整 PID 参数</div>
+        <div class="future-item"><strong>手势命令：</strong>增加握拳暂停、张开跟踪等手势指令</div>
+        <div class="future-item"><strong>机械优化：</strong>采用更精密的舵机减少抖动</div>
+    </div>
+    <div class="footer-text">基于手势识别的智能追踪系统</div>
+    <div class="page-num">12</div>
+</div>
+
+<!-- 致谢 -->
+<div class="page" id="thanks" data-document-role="page" data-label="致谢">
+    <div class="thanks-line"></div>
+    <h1>致谢</h1>
+    <p>感谢指导教师的悉心指导<br>感谢各位评审老师的聆听<br>恳请各位老师批评指正</p>
+    <div class="thanks-info">答辩人：于星宇 | 2026.7</div>
+</div>
+
+</body>
+</html>
